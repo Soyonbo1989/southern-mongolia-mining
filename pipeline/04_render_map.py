@@ -224,6 +224,15 @@ m = folium.Map(location=INITIAL_CENTER, zoom_start=INITIAL_ZOOM,
                tiles="OpenStreetMap", control_scale=True)
 map_var = m.get_name()
 
+# No-cache meta tags so opening the file (or hitting a host that serves
+# it) always picks up the latest render, not a stale cached copy.
+m.get_root().header.add_child(folium.Element(
+    '<meta http-equiv="Cache-Control" '
+    'content="no-cache, no-store, must-revalidate">\n'
+    '<meta http-equiv="Pragma" content="no-cache">\n'
+    '<meta http-equiv="Expires" content="0">'
+))
+
 # CSS that the slider toggles via a body class. When the timeline is
 # active (slider < SLIDER_MAX), Tang centroid markers + cluster icons
 # are visually hidden — Tang is 2019 imagery with no temporal axis, so
