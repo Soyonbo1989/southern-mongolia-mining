@@ -739,15 +739,37 @@ tab_styles = f"""
   font-size: 13px; font-weight: 500;
   cursor: pointer; background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   color: #555;
-  transition: color 120ms, border-color 120ms;
+  transition: color 120ms, border-color 120ms, transform 200ms;
 }}
 .sm-tab:hover {{ color: #222; }}
 .sm-tab.sm-tab-active {{
   color: #c62828;
   border-bottom-color: #c62828;
   font-weight: 600;
+}}
+
+/* Data Story tab — red text + arrow at rest, to nudge readers toward
+   the narrative. Arrow is hidden on the active state (already there).
+   Subtle translateY on hover acts as a "lift" affordance — only on the
+   Data Story tab; the Map tab is the default landing surface. */
+#sm-tab-story {{
+  color: #c62828;
+  font-weight: 600;
+}}
+#sm-tab-story::after {{
+  content: " →";
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 1;
+  transition: opacity 150ms;
+}}
+#sm-tab-story:hover {{
+  transform: translateY(-1px);
+}}
+#sm-tab-story.sm-tab-active::after {{
+  opacity: 0;
 }}
 
 /* Story-mode body scroll: folium's defaults lock body height to
