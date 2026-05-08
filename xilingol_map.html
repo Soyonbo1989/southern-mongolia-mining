@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_211fe449fbd8c5b6f976d8b4859b14c9 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_211fe449fbd8c5b6f976d8b4859b14c9" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_211fe449fbd8c5b6f976d8b4859b14c9 = L.map(
+                "map_211fe449fbd8c5b6f976d8b4859b14c9",
+                {
+                    center: [44.5, 117.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 7,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_89345be795904fc5886cfef0cb595e10 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_89345be795904fc5886cfef0cb595e10.addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+            var circle_marker_351080341f0ac34fb20f3f9dc3799fed = L.circleMarker(
+                [44.06697, 116.22348],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_7688f92fa32c6fd4f15ee84b90a6ca89 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_60ca7302efbafb0215382711ddd41cdd = $(`<div id="html_60ca7302efbafb0215382711ddd41cdd" style="width: 100.0%; height: 100.0%;"><b>Shengli East No.2 Coal Mine</b><br><i>大唐国际发电股份有限公司胜利东二号露天煤矿（一期）</i><br>Owner: Inner Mongolia Datang International Xilinhaote Mining Company [100%]<br>Capacity: 10 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_7688f92fa32c6fd4f15ee84b90a6ca89.setContent(html_60ca7302efbafb0215382711ddd41cdd);
+            
+        
+
+        circle_marker_351080341f0ac34fb20f3f9dc3799fed.bindPopup(popup_7688f92fa32c6fd4f15ee84b90a6ca89)
+        ;
+
+        
+    
+    
+            var circle_marker_c2a52163a5564b214122ad6e4cedb668 = L.circleMarker(
+                [44.06697, 116.22348],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_05b316823535559e483c5cda99895fce = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_7fb36c4fb0b2fa60ec29aebc9f6de4b2 = $(`<div id="html_7fb36c4fb0b2fa60ec29aebc9f6de4b2" style="width: 100.0%; height: 100.0%;"><b>Shengli East No.2 Coal Mine</b><br><i>大唐国际发电股份有限公司胜利东二号露天矿(二期)</i><br>Owner: Inner Mongolia Datang International Xilinhaote Mining Company [100%]<br>Capacity: 20 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_05b316823535559e483c5cda99895fce.setContent(html_7fb36c4fb0b2fa60ec29aebc9f6de4b2);
+            
+        
+
+        circle_marker_c2a52163a5564b214122ad6e4cedb668.bindPopup(popup_05b316823535559e483c5cda99895fce)
+        ;
+
+        
+    
+    
+            var circle_marker_f0ecfc2f6a9bf59f725fbf03f8eb799c = L.circleMarker(
+                [44.06697, 116.22348],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_d5836b8ebcb62dc0b1fb37225b5fe4b0 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_b4c4c124a55a74389108fbb48c1bf4d2 = $(`<div id="html_b4c4c124a55a74389108fbb48c1bf4d2" style="width: 100.0%; height: 100.0%;"><b>Shengli East No.2 Coal Mine</b><br><i>大唐国际发电股份有限公司胜利东二号露天矿(三期)</i><br>Owner: Inner Mongolia Datang International Xilinhaote Mining Company [100%]<br>Capacity: 30 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_d5836b8ebcb62dc0b1fb37225b5fe4b0.setContent(html_b4c4c124a55a74389108fbb48c1bf4d2);
+            
+        
+
+        circle_marker_f0ecfc2f6a9bf59f725fbf03f8eb799c.bindPopup(popup_d5836b8ebcb62dc0b1fb37225b5fe4b0)
+        ;
+
+        
+    
+    
+            var circle_marker_d2c0bc348dd8be297cdcc9e25ebfdb2a = L.circleMarker(
+                [44.997659, 115.334804],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_b5b1d89437dceeb016e912141a26b325 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_064b8ee5c9377735501173445777d0b9 = $(`<div id="html_064b8ee5c9377735501173445777d0b9" style="width: 100.0%; height: 100.0%;"><b>Da'an Coal Mine</b><br><i>阿巴嘎旗达安矿业有限责任公司达安煤矿</i><br>Owner: Abaga Banner Da'an Mining Company [100%]<br>Capacity: 1.2 Mtpa<br>Status: Proposed<br>Type: Underground</div>`)[0];
+                popup_b5b1d89437dceeb016e912141a26b325.setContent(html_064b8ee5c9377735501173445777d0b9);
+            
+        
+
+        circle_marker_d2c0bc348dd8be297cdcc9e25ebfdb2a.bindPopup(popup_b5b1d89437dceeb016e912141a26b325)
+        ;
+
+        
+    
+    
+            var circle_marker_14432b28466c4a74d059b925e7c8a68d = L.circleMarker(
+                [43.553884, 115.167883],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_739161080843dc698ae3c3ecc1b8a73d = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_523d7e068807375c95d2f736b0bf475e = $(`<div id="html_523d7e068807375c95d2f736b0bf475e" style="width: 100.0%; height: 100.0%;"><b>Chagannur No.1 Coal Mine</b><br><i>锡林郭勒峰峰能源有限公司查干淖尔一号井</i><br>Owner: Xilingol Fengfeng Energy Company [100%]<br>Capacity: 5 Mtpa<br>Status: Proposed<br>Type: Underground</div>`)[0];
+                popup_739161080843dc698ae3c3ecc1b8a73d.setContent(html_523d7e068807375c95d2f736b0bf475e);
+            
+        
+
+        circle_marker_14432b28466c4a74d059b925e7c8a68d.bindPopup(popup_739161080843dc698ae3c3ecc1b8a73d)
+        ;
+
+        
+    
+    
+            var circle_marker_06786d4faafd5d388fcfa5984c496e97 = L.circleMarker(
+                [42.241024, 116.465199],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_49ce4605ee6ba9aed4aabe0dcb7ea4dc = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_08cbe2a45a5a40848de896944d4a8f53 = $(`<div id="html_08cbe2a45a5a40848de896944d4a8f53" style="width: 100.0%; height: 100.0%;"><b>Duolun Coal Mine</b><br><i>内蒙古蒙东畅彤矿业有限责任公司多伦煤矿</i><br>Owner: Inner Mongolia Mengdong Changtong Mining Company [100%]<br>Capacity: 1.2 Mtpa<br>Status: Operating<br>Type: Underground</div>`)[0];
+                popup_49ce4605ee6ba9aed4aabe0dcb7ea4dc.setContent(html_08cbe2a45a5a40848de896944d4a8f53);
+            
+        
+
+        circle_marker_06786d4faafd5d388fcfa5984c496e97.bindPopup(popup_49ce4605ee6ba9aed4aabe0dcb7ea4dc)
+        ;
+
+        
+    
+    
+            var circle_marker_5e5880f7a3af6533a5d40f0dbe285837 = L.circleMarker(
+                [45.654191, 119.144472],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_808a7fd742e40499486dfd8e2e3f8965 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_9869e8283bd5549cbf5c3980982a6bfd = $(`<div id="html_9869e8283bd5549cbf5c3980982a6bfd" style="width: 100.0%; height: 100.0%;"><b>Nongnaimiao Luxin Coal Mine</b><br><i>内蒙古鲁新能源开发有限责任公司农乃庙鲁新煤矿</i><br>Owner: Inner Mongolia Luxin Energy Development Company [100%]<br>Capacity: 5 Mtpa<br>Status: Operating<br>Type: Underground</div>`)[0];
+                popup_808a7fd742e40499486dfd8e2e3f8965.setContent(html_9869e8283bd5549cbf5c3980982a6bfd);
+            
+        
+
+        circle_marker_5e5880f7a3af6533a5d40f0dbe285837.bindPopup(popup_808a7fd742e40499486dfd8e2e3f8965)
+        ;
+
+        
+    
+    
+            var circle_marker_678a75fb75cac2265547af95b4abf5d6 = L.circleMarker(
+                [44.654941, 116.702955],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_2b534ced7365dc7765b2037c4ba3b5d7 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_1c75cf1d5aa49256067365a391a351d2 = $(`<div id="html_1c75cf1d5aa49256067365a391a351d2" style="width: 100.0%; height: 100.0%;"><b>West No. 1 Coal Mine</b><br><i>华润电力（锡林郭勒）煤业有限公司西一号煤矿</i><br>Owner: China Resources Power (Xilinguole) Coal Industry Company [100%]<br>Capacity: 8 Mtpa<br>Status: Proposed<br>Type: Underground</div>`)[0];
+                popup_2b534ced7365dc7765b2037c4ba3b5d7.setContent(html_1c75cf1d5aa49256067365a391a351d2);
+            
+        
+
+        circle_marker_678a75fb75cac2265547af95b4abf5d6.bindPopup(popup_2b534ced7365dc7765b2037c4ba3b5d7)
+        ;
+
+        
+    
+    
+            var circle_marker_0f2351cbbff247eb00b56196e2ca6b41 = L.circleMarker(
+                [44.947927, 118.666974],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_f1defd6eb942dd9fca20e494eeec50ae = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_ea58c6e7843785eb3540b9d873588a02 = $(`<div id="html_ea58c6e7843785eb3540b9d873588a02" style="width: 100.0%; height: 100.0%;"><b>Baiyinhua Haizhou No. 4 Surface Mine</b><br><i>内蒙古白音华海州露天煤矿有限公司</i><br>Owner: Inner Mongolia Baiyinhua Haizhou Surface Mine Company [100%]<br>Capacity: 8 Mtpa<br>Status: Operating<br>Type: Underground</div>`)[0];
+                popup_f1defd6eb942dd9fca20e494eeec50ae.setContent(html_ea58c6e7843785eb3540b9d873588a02);
+            
+        
+
+        circle_marker_0f2351cbbff247eb00b56196e2ca6b41.bindPopup(popup_f1defd6eb942dd9fca20e494eeec50ae)
+        ;
+
+        
+    
+    
+            var circle_marker_11fe37c6f90eb97e076349689a9ca0f5 = L.circleMarker(
+                [44.897826, 118.615908],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_3673df9a9c85c593fa74bbf4f04ed628 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_cc6aecea3b33fdfe1a52c41ed65f6f48 = $(`<div id="html_cc6aecea3b33fdfe1a52c41ed65f6f48" style="width: 100.0%; height: 100.0%;"><b>Baiyinhua No.3 Surface Mine</b><br><i>内蒙古白音华蒙东露天煤业有限公司白音华三号露天矿</i><br>Owner: Inner Mongolia Baiyinhua Mengdong Surface Coal Industry Company [100%]<br>Capacity: 20 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_3673df9a9c85c593fa74bbf4f04ed628.setContent(html_cc6aecea3b33fdfe1a52c41ed65f6f48);
+            
+        
+
+        circle_marker_11fe37c6f90eb97e076349689a9ca0f5.bindPopup(popup_3673df9a9c85c593fa74bbf4f04ed628)
+        ;
+
+        
+    
+    
+            var circle_marker_39e3f3bebf23b3ead8846ed955ea9649 = L.circleMarker(
+                [44.786827, 118.455621],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_66a867f248ccec4419102353da20e292 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_5ffc37f55ee56b3968c95d0d6532521d = $(`<div id="html_5ffc37f55ee56b3968c95d0d6532521d" style="width: 100.0%; height: 100.0%;"><b>Baiyinhua No.1 Surface Mine</b><br><i>内蒙古平西白音华煤业有限公司</i><br>Owner: Inner Mongolia Pingxi Baiyinhua Coal Industry Group [100%]<br>Capacity: 12 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_66a867f248ccec4419102353da20e292.setContent(html_5ffc37f55ee56b3968c95d0d6532521d);
+            
+        
+
+        circle_marker_39e3f3bebf23b3ead8846ed955ea9649.bindPopup(popup_66a867f248ccec4419102353da20e292)
+        ;
+
+        
+    
+    
+            var circle_marker_9d798c80a7a234e2b0b10a8b927b0bb0 = L.circleMarker(
+                [45.250314, 119.269262],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_f176b5593a247283110d5772971d96d3 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_e0d2d589d84607d8e8b59cd1604a952a = $(`<div id="html_e0d2d589d84607d8e8b59cd1604a952a" style="width: 100.0%; height: 100.0%;"><b>Bao'erhu Shugaobu Coal Mine</b><br><i>西乌珠穆沁旗意隆煤业有限责任公司包尔呼舒高布煤矿</i><br>Owner: West Ujimqin Banner Yilong Coal Industry Company [100%]<br>Capacity: 1.5 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_f176b5593a247283110d5772971d96d3.setContent(html_e0d2d589d84607d8e8b59cd1604a952a);
+            
+        
+
+        circle_marker_9d798c80a7a234e2b0b10a8b927b0bb0.bindPopup(popup_f176b5593a247283110d5772971d96d3)
+        ;
+
+        
+    
+    
+            var circle_marker_6d9d6418bdf0f05e3f3bfc0c6f410597 = L.circleMarker(
+                [45.221363, 119.239319],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_5c4fb13571f0375cc3b0b87326fa1e56 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_aba638e55ceb48b9593e76f372296a15 = $(`<div id="html_aba638e55ceb48b9593e76f372296a15" style="width: 100.0%; height: 100.0%;"><b>Baorihushuo Coal Mine</b><br><i>西乌珠穆沁旗宝日胡硕煤矿</i><br>Owner: Xiwuzhumuqin Banner Baorihushuo Coal Company [100%]<br>Capacity: 1.2 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_5c4fb13571f0375cc3b0b87326fa1e56.setContent(html_aba638e55ceb48b9593e76f372296a15);
+            
+        
+
+        circle_marker_6d9d6418bdf0f05e3f3bfc0c6f410597.bindPopup(popup_5c4fb13571f0375cc3b0b87326fa1e56)
+        ;
+
+        
+    
+    
+            var circle_marker_87542e98d3defba001544ed8e0c2c29d = L.circleMarker(
+                [45.92834677, 119.1066869],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.5, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_5e1051b9700e188836720b6fd41e8a26 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_601e10355dadb058d00a124a9cca69ff = $(`<div id="html_601e10355dadb058d00a124a9cca69ff" style="width: 100.0%; height: 100.0%;"><b>Hesigewula South Surface Coal Mine</b><br><i>内蒙古锡林河煤化工有限责任公司贺斯格乌拉南露天煤矿</i><br>Owner: Inner Mongolia Xilinhe Coal Chemical Company [100%]<br>Capacity: 15 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_5e1051b9700e188836720b6fd41e8a26.setContent(html_601e10355dadb058d00a124a9cca69ff);
+            
+        
+
+        circle_marker_87542e98d3defba001544ed8e0c2c29d.bindPopup(popup_5e1051b9700e188836720b6fd41e8a26)
+        ;
+
+        
+    
+    
+            var circle_marker_6f61c4638b589f9b116ba19abcac6098 = L.circleMarker(
+                [44.036567, 113.229983],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_bab7134f321e162ca4e3ed466cadfd10 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_4b721745041a7d12de86a163b1e0b753 = $(`<div id="html_4b721745041a7d12de86a163b1e0b753" style="width: 100.0%; height: 100.0%;"><b>Manglai Surface Coal Mine</b><br><i>中铁资源苏尼特左旗芒来矿业有限公司芒来露天煤矿</i><br>Owner: China Railway Resources Sunitezuoqi Manglai Surface Mine Company [100%]<br>Capacity: 10 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_bab7134f321e162ca4e3ed466cadfd10.setContent(html_4b721745041a7d12de86a163b1e0b753);
+            
+        
+
+        circle_marker_6f61c4638b589f9b116ba19abcac6098.bindPopup(popup_bab7134f321e162ca4e3ed466cadfd10)
+        ;
+
+        
+    
+    
+            var circle_marker_c534062e59af2ed98b3760e65255e538 = L.circleMarker(
+                [43.954677, 115.91126],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_97111664dbf45f3e8b6ac004680c4e5a = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_ff4593b0bd715f9401a69516d36d9e84 = $(`<div id="html_ff4593b0bd715f9401a69516d36d9e84" style="width: 100.0%; height: 100.0%;"><b>Shengli West No.2 Coal Mine</b><br><i>锡林郭勒盟蒙东矿业有限责任公司胜利西二号露天煤矿</i><br>Owner: Xilin Gol Mengdong Mining Company [100%]<br>Capacity: 10 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_97111664dbf45f3e8b6ac004680c4e5a.setContent(html_ff4593b0bd715f9401a69516d36d9e84);
+            
+        
+
+        circle_marker_c534062e59af2ed98b3760e65255e538.bindPopup(popup_97111664dbf45f3e8b6ac004680c4e5a)
+        ;
+
+        
+    
+    
+            var circle_marker_5cc465559e170bddfc95e948b8295a2f = L.circleMarker(
+                [43.999168, 116.00104],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_cbc0da1898822b93348b0f900061f2dd = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_1e4b5f9dd6c8c2167a35a4246cecd0ac = $(`<div id="html_1e4b5f9dd6c8c2167a35a4246cecd0ac" style="width: 100.0%; height: 100.0%;"><b>West No. 3 Surface Coal Mine</b><br><i>内蒙古胜利矿区胜利西三号露天矿</i><br>Owner: Inner Mongolia Energy Power Generation Investment Group [100%]<br>Capacity: 6 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_cbc0da1898822b93348b0f900061f2dd.setContent(html_1e4b5f9dd6c8c2167a35a4246cecd0ac);
+            
+        
+
+        circle_marker_5cc465559e170bddfc95e948b8295a2f.bindPopup(popup_cbc0da1898822b93348b0f900061f2dd)
+        ;
+
+        
+    
+    
+            var circle_marker_609159532f12070e68a10d3734a3aab5 = L.circleMarker(
+                [44.947927, 118.666974],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_d535f6761812ecd4016902de92de1798 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_5d108505d740c15e23a04683c03612cb = $(`<div id="html_5d108505d740c15e23a04683c03612cb" style="width: 100.0%; height: 100.0%;"><b>Baiyinhua Haizhou No. 4 Surface Mine</b><br><i>内蒙古白音华海州露天煤矿有限公司</i><br>Owner: Inner Mongolia Baiyinhua Haizhou Surface Mine Company [100%]<br>Capacity: 5 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_d535f6761812ecd4016902de92de1798.setContent(html_5d108505d740c15e23a04683c03612cb);
+            
+        
+
+        circle_marker_609159532f12070e68a10d3734a3aab5.bindPopup(popup_d535f6761812ecd4016902de92de1798)
+        ;
+
+        
+    
+    
+            var circle_marker_8602bfb38b6abd82b6907659de5e8460 = L.circleMarker(
+                [44.315907, 117.252294],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_40a269993ea3fe4e17a8f90b44ca5889 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_48f106037a73d1be6c58cc4dd2f78db1 = $(`<div id="html_48f106037a73d1be6c58cc4dd2f78db1" style="width: 100.0%; height: 100.0%;"><b>Jilin Gol No. 2 Surface Mine</b><br><i>内蒙古吉林郭勒二号露天煤矿有限公司吉林郭勒二号露天煤矿</i><br>Owner: Inner Mongolia Jilin Gol No. 2 Open Pit Mine Company [100%]<br>Capacity: 18 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_40a269993ea3fe4e17a8f90b44ca5889.setContent(html_48f106037a73d1be6c58cc4dd2f78db1);
+            
+        
+
+        circle_marker_8602bfb38b6abd82b6907659de5e8460.bindPopup(popup_40a269993ea3fe4e17a8f90b44ca5889)
+        ;
+
+        
+    
+    
+            var circle_marker_1439bba9bea4dc660e3f4090fd3f6ecf = L.circleMarker(
+                [44.002945, 116.00678],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.0, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_e7d84d97540c01828a48fdc2e06827c8 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_615b5a7bf71d69e94863182de347224c = $(`<div id="html_615b5a7bf71d69e94863182de347224c" style="width: 100.0%; height: 100.0%;"><b>Shengli No.1 Open-Pit Coal Mine</b><br><i>中国神华能源股份有限公司胜利一号露天矿</i><br>Owner: China Energy Beidian Shengli Energy [100%]<br>Capacity: 28 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_e7d84d97540c01828a48fdc2e06827c8.setContent(html_615b5a7bf71d69e94863182de347224c);
+            
+        
+
+        circle_marker_1439bba9bea4dc660e3f4090fd3f6ecf.bindPopup(popup_e7d84d97540c01828a48fdc2e06827c8)
+        ;
+
+        
+    
+    
+            var circle_marker_d74a7d8803214842506a3af1c78692a3 = L.circleMarker(
+                [44.809523, 118.500466],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.5, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_39939d15c3817ca1ff7b76205f25b6a1 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_0209580bbeb2c4ce5cd42114c1f283a8 = $(`<div id="html_0209580bbeb2c4ce5cd42114c1f283a8" style="width: 100.0%; height: 100.0%;"><b>Baiyinhua No. 2 Surface Mine</b><br><i>内蒙古锡林郭勒白音华煤电有限责任公司露天矿</i><br>Owner: Inner Mongolia Xilin Gol Baiyinhua Coal and Electricity Company [100%]<br>Capacity: 15 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_39939d15c3817ca1ff7b76205f25b6a1.setContent(html_0209580bbeb2c4ce5cd42114c1f283a8);
+            
+        
+
+        circle_marker_d74a7d8803214842506a3af1c78692a3.bindPopup(popup_39939d15c3817ca1ff7b76205f25b6a1)
+        ;
+
+        
+    
+    
+            var circle_marker_3a75d1ce39b8513ae9851caaf588a909 = L.circleMarker(
+                [45.851603, 117.412272],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_78f8d3619c5b707c2d0c31c76f496bae = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_a9102c116cbb57978f5bf057509d9777 = $(`<div id="html_a9102c116cbb57978f5bf057509d9777" style="width: 100.0%; height: 100.0%;"><b>Inner Mongolia Wunite Coal Mine</b><br><i>内蒙古裕通实业有限公司乌尼特煤矿</i><br>Owner: Inner Mongolia Wunite Mining Co Ltd [100%]<br>Capacity: 1.2 Mtpa<br>Status: Operating<br>Type: Surface</div>`)[0];
+                popup_78f8d3619c5b707c2d0c31c76f496bae.setContent(html_a9102c116cbb57978f5bf057509d9777);
+            
+        
+
+        circle_marker_3a75d1ce39b8513ae9851caaf588a909.bindPopup(popup_78f8d3619c5b707c2d0c31c76f496bae)
+        ;
+
+        
+    
+    
+            var circle_marker_6c2ed400b59b5df3eeec9c706a045b8f = L.circleMarker(
+                [42.135646, 114.380891],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_a288f44ea425f9fa679c4aa080e185f5 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_47f45632695f54e3abc3e3307136acb7 = $(`<div id="html_47f45632695f54e3abc3e3307136acb7" style="width: 100.0%; height: 100.0%;"><b>Inner Mongolia Yuanlin Coal Mine</b><br><i>铁煤集团内蒙古东林煤炭有限责任公司塬林煤矿</i><br>Owner: Tiemei Group Inner Mongolia Donglin Coal Co Ltd [100%]<br>Capacity: 0.6 Mtpa<br>Status: Operating<br>Type: Underground</div>`)[0];
+                popup_a288f44ea425f9fa679c4aa080e185f5.setContent(html_47f45632695f54e3abc3e3307136acb7);
+            
+        
+
+        circle_marker_6c2ed400b59b5df3eeec9c706a045b8f.bindPopup(popup_a288f44ea425f9fa679c4aa080e185f5)
+        ;
+
+        
+    
+    
+            var circle_marker_99e11fa830863ecfc4637e74f36d27c6 = L.circleMarker(
+                [45.127363, 115.633339],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_7015a478bdd766a9d959cdba9365db02 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_95c2edcd27e83959617694176d905dcc = $(`<div id="html_95c2edcd27e83959617694176d905dcc" style="width: 100.0%; height: 100.0%;"><b>Inner Mongolia Tiandi Xilin Coal Mine</b><br><i>天地锡林郭勒煤业有限公司天地锡林煤矿</i><br>Owner: Tiandi Xilingol Coal Industry Co Ltd [100%]<br>Capacity: 0.6 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_7015a478bdd766a9d959cdba9365db02.setContent(html_95c2edcd27e83959617694176d905dcc);
+            
+        
+
+        circle_marker_99e11fa830863ecfc4637e74f36d27c6.bindPopup(popup_7015a478bdd766a9d959cdba9365db02)
+        ;
+
+        
+    
+    
+            var circle_marker_db9c8f5faa4c30176cc4aa1aab9f3f82 = L.circleMarker(
+                [45.203807, 115.643676],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_a9efe0b50f6538c9681dad8efcc3b399 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_a642aae048c7078781c62e6979814430 = $(`<div id="html_a642aae048c7078781c62e6979814430" style="width: 100.0%; height: 100.0%;"><b>Inner Mongolia East Ujimqin Banner Amuguleng</b><br><i>东乌珠穆沁旗阿木古楞矿业有限责任公司</i><br>Owner: East Ujimqin Banner Amuguleng Mining Co Ltd [100%]<br>Capacity: 0.6 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_a9efe0b50f6538c9681dad8efcc3b399.setContent(html_a642aae048c7078781c62e6979814430);
+            
+        
+
+        circle_marker_db9c8f5faa4c30176cc4aa1aab9f3f82.bindPopup(popup_a9efe0b50f6538c9681dad8efcc3b399)
+        ;
+
+        
+    
+    
+            var circle_marker_2ec9d728b6a5475dfb4a150ab8285369 = L.circleMarker(
+                [45.655521, 119.118122],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+        var popup_601ea6b1de3babe001142603eede89a5 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_eef80821399600a777b73ab49e5dca75 = $(`<div id="html_eef80821399600a777b73ab49e5dca75" style="width: 100.0%; height: 100.0%;"><b>Inner Mongolia Xilingol League Chagan Tolgoi Coal Mine</b><br><i>锡林郭勒盟乌拉盖河矿业有限公司查干陶勒盖煤矿</i><br>Owner: Xilingol League Wulagaihe Mining Co Ltd [100%]<br>Capacity: 5 Mtpa<br>Status: Proposed<br>Type: Surface</div>`)[0];
+                popup_601ea6b1de3babe001142603eede89a5.setContent(html_eef80821399600a777b73ab49e5dca75);
+            
+        
+
+        circle_marker_2ec9d728b6a5475dfb4a150ab8285369.bindPopup(popup_601ea6b1de3babe001142603eede89a5)
+        ;
+
+        
+    
+    
+            var marker_8ac33451336c4fa7f7884c7658ad299f = L.marker(
+                [44.5, 118.0],
+                {
+}
+            ).addTo(map_211fe449fbd8c5b6f976d8b4859b14c9);
+        
+    
+            var icon_f44e864beb311613515156bf00dc53fb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "black",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_57d255fef36a4901fffbd6fa4a388464 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ca09eedaeb4cc4bb7909e481cff6fd02 = $(`<div id="html_ca09eedaeb4cc4bb7909e481cff6fd02" style="width: 100.0%; height: 100.0%;"><b>莫日根遇害区域</b><br>2011年5月10日<br>(精确点位未公开)</div>`)[0];
+                popup_57d255fef36a4901fffbd6fa4a388464.setContent(html_ca09eedaeb4cc4bb7909e481cff6fd02);
+            
+        
+
+        marker_8ac33451336c4fa7f7884c7658ad299f.bindPopup(popup_57d255fef36a4901fffbd6fa4a388464)
+        ;
+
+        
+    
+    
+                marker_8ac33451336c4fa7f7884c7658ad299f.setIcon(icon_f44e864beb311613515156bf00dc53fb);
+            
+</script>
+</html>

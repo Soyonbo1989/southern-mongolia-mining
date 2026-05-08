@@ -1,0 +1,108 @@
+{
+  "gem_count": 423,
+  "tang_polygon_count": 4843,
+  "tang_centroid_count": 4843,
+  "tang_total_area_km2": 2564.8,
+  "tang_min_area_km2": 0.001004,
+  "tang_median_area_km2": 0.047425,
+  "tang_max_area_km2": 127.6705,
+  "tang_p95_area_km2": 1.8408,
+  "prefectures": [
+    {
+      "name": "Ordos",
+      "count": 324,
+      "south": 38.053,
+      "north": 40.352004,
+      "west": 106.529516,
+      "east": 111.430155
+    },
+    {
+      "name": "Wuhai",
+      "count": 31,
+      "south": 36.490401,
+      "north": 39.835551,
+      "west": 106.613571,
+      "east": 106.972803
+    },
+    {
+      "name": "Xilin Gol",
+      "count": 23,
+      "south": 42.135646,
+      "north": 45.92834677,
+      "west": 113.229983,
+      "east": 119.269262
+    },
+    {
+      "name": "Hulun Buir",
+      "count": 16,
+      "south": 48.588717,
+      "north": 49.499745,
+      "west": 116.821847,
+      "east": 121.423076
+    },
+    {
+      "name": "Chifeng",
+      "count": 8,
+      "south": 42.000041,
+      "north": 43.7025,
+      "west": 119.215836,
+      "east": 120.805416
+    },
+    {
+      "name": "Tongliao",
+      "count": 7,
+      "south": 43.112948,
+      "north": 45.536522,
+      "west": 119.423037,
+      "east": 123.367684
+    },
+    {
+      "name": "Alxa",
+      "count": 4,
+      "south": 37.965931,
+      "north": 39.192515,
+      "west": 105.662655,
+      "east": 106.274431
+    },
+    {
+      "name": "Baotou",
+      "count": 4,
+      "south": 40.681488,
+      "north": 40.710661,
+      "west": 110.514916,
+      "east": 110.603908
+    },
+    {
+      "name": "Hohhot",
+      "count": 3,
+      "south": 39.739756,
+      "north": 39.850508,
+      "west": 111.328355,
+      "east": 111.379703
+    },
+    {
+      "name": "Bayannur",
+      "count": 1,
+      "south": 40.950869,
+      "north": 40.950869,
+      "west": 109.559031,
+      "east": 109.559031
+    },
+    {
+      "name": "Holingol",
+      "count": 1,
+      "south": 45.382698,
+      "north": 45.382698,
+      "west": 119.486564,
+      "east": 119.486564
+    },
+    {
+      "name": "Manzhouli",
+      "count": 1,
+      "south": 49.393174,
+      "north": 49.393174,
+      "west": 117.766854,
+      "east": 117.766854
+    }
+  ]
+}
