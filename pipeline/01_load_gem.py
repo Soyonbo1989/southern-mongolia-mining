@@ -38,6 +38,39 @@ def normalize_pref(p):
     return PREF_MAP.get(p, p)
 
 
+# Coal Grade canonicalization. Source values include "Thermal", "Met",
+# "Thermal & Met", "-", and a single lowercase "met". Anything not in the
+# three real categories is mapped to None and treated as missing/fallback
+# in the renderer (rendered as Thermal-shape circle).
+def normalize_grade(g):
+    if pd.isna(g):
+        return None
+    s = str(g).strip()
+    sl = s.lower()
+    if sl == "thermal":
+        return "Thermal"
+    if sl == "met":
+        return "Met"
+    if sl in ("thermal & met", "thermal and met", "met & thermal"):
+        return "Thermal & Met"
+    return None
+
+
+# Opening Year. GEM stores "TBD" for proposed mines without a target year,
+# plus some blanks. Coerce non-numeric values to None — the renderer treats
+# those as "year unknown" (always shown, dashed/translucent style).
+def normalize_year(y):
+    if pd.isna(y):
+        return None
+    try:
+        yi = int(float(y))
+    except (ValueError, TypeError):
+        return None
+    if 1800 <= yi <= 2100:
+        return yi
+    return None
+
+
 def main():
     df = pd.read_excel(SRC, sheet_name="GCMT Non-closed Mines")
     sm = df[(df["Country / Area"] == "China") &
@@ -59,6 +92,11 @@ def main():
             capacity = float(row["Capacity (Mtpa)"])
             status = row["Status"]
 
+        # Opening year: for multi-phase projects use the earliest phase year.
+        years = [normalize_year(y) for y in group["Opening Year"]]
+        years = [y for y in years if y is not None]
+        opening_year = min(years) if years else None
+
         props = {
             "mine_name": row["Mine Name"],
             "mine_name_zh": (row["Mine Name (Non-ENG)"]
@@ -70,6 +108,8 @@ def main():
             "status": status,
             "mine_type": (row["Mine Type"]
                           if pd.notna(row["Mine Type"]) else None),
+            "coal_grade": normalize_grade(row["Coal Grade"]),
+            "opening_year": opening_year,
             "prefecture": row["Prefecture"],
             "merged_count": n,
         }

@@ -28,6 +28,7 @@ LAYER_FILES = [
     "gem_sm_mines.geojson",
     "tang_sm_polygons.geojson",
     "tang_sm_centroids.geojson",
+    "noncoal_mines.geojson",
 ]
 
 
@@ -42,6 +43,7 @@ def main():
     gem = gpd.read_file(FINAL / "gem_sm_mines.geojson")
     tang_poly = gpd.read_file(FINAL / "tang_sm_polygons.geojson")
     tang_cent = gpd.read_file(FINAL / "tang_sm_centroids.geojson")
+    noncoal = gpd.read_file(FINAL / "noncoal_mines.geojson")
 
     # Per-prefecture aggregates from GEM, sorted desc by mine count
     pref_info = []
@@ -58,6 +60,7 @@ def main():
 
     summary = {
         "gem_count": int(len(gem)),
+        "noncoal_count": int(len(noncoal)),
         "tang_polygon_count": int(len(tang_poly)),
         "tang_centroid_count": int(len(tang_cent)),
         "tang_total_area_km2": round(float(tang_poly["area_km2"].sum()), 1),

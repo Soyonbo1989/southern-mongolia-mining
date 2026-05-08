@@ -36,6 +36,15 @@ TANG_AREA_CAP_PCT = 95               # cap on the radius mapping
 TANG_POLY_MIN_ZOOM = 9
 TANG_COLOR = "#1f3a8a"               # deep blue
 
+# Timeline slider range. Upper bound is the present year, not the latest
+# data point in GEM — mines with an Opening Year past the present are
+# planned/proposed and shouldn't be on a historical "mines opened by year"
+# timeline. They get folded into the undated set: visible only when the
+# slider is at SLIDER_MAX, hidden as soon as the user starts sliding.
+SLIDER_MIN = 1912
+SLIDER_MAX = 2026
+SLIDER_INIT = SLIDER_MAX
+
 
 # ---------------------------------------------------------------------------
 # Load data
@@ -48,11 +57,13 @@ def load_geojson(path):
 gem_fc = load_geojson(FINAL / "gem_sm_mines.geojson")
 tang_poly_fc = load_geojson(FINAL / "tang_sm_polygons.geojson")
 tang_cent_fc = load_geojson(FINAL / "tang_sm_centroids.geojson")
+noncoal_fc = load_geojson(FINAL / "noncoal_mines.geojson")
 with open(FINAL / "summary.json", "r", encoding="utf-8") as f:
     summary = json.load(f)
 
 gem_features = gem_fc["features"]
 tang_centroids = tang_cent_fc["features"]
+noncoal_features = noncoal_fc["features"]
 
 
 # ---------------------------------------------------------------------------
@@ -81,6 +92,124 @@ def gem_color(status):
     return "#7f7f7f"
 
 
+# Coal Grade → marker shape. None / unrecognized → circle (Thermal fallback).
+def gem_shape(grade):
+    if grade == "Met":
+        return "triangle"
+    if grade == "Thermal & Met":
+        return "diamond"
+    return "circle"
+
+
+# Build an SVG DivIcon for triangle / diamond markers, sized to inscribe the
+# same radius as the equivalent CircleMarker. Triangle apex points up;
+# diamond points up/down/left/right (square rotated 45°). When `unknown` is
+# true (Opening Year missing), use lower opacity + dashed stroke to match
+# the dashed-circle treatment for unknown-year mines.
+def gem_svg_icon(shape, r, color, unknown=False):
+    import math
+    pad = 1.5  # leave room for stroke
+    d = 2 * r + 2 * pad
+    cx = cy = d / 2
+    if shape == "triangle":
+        top = (cx, cy - r)
+        br = (cx + r * math.cos(math.radians(30)),
+              cy + r * math.sin(math.radians(30)))
+        bl = (cx - r * math.cos(math.radians(30)),
+              cy + r * math.sin(math.radians(30)))
+        pts = f"{top[0]:.2f},{top[1]:.2f} {br[0]:.2f},{br[1]:.2f} {bl[0]:.2f},{bl[1]:.2f}"
+    elif shape == "diamond":
+        pts = (f"{cx:.2f},{cy - r:.2f} {cx + r:.2f},{cy:.2f} "
+               f"{cx:.2f},{cy + r:.2f} {cx - r:.2f},{cy:.2f}")
+    else:
+        raise ValueError(shape)
+    fill_op = 0.35 if unknown else 0.7
+    stroke_op = 0.55 if unknown else 0.7
+    dash_attr = ' stroke-dasharray="3,2"' if unknown else ''
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{d:.2f}" '
+        f'height="{d:.2f}" viewBox="0 0 {d:.2f} {d:.2f}" '
+        f'style="display:block;overflow:visible;">'
+        f'<polygon points="{pts}" fill="{color}" fill-opacity="{fill_op}" '
+        f'stroke="{color}" stroke-width="1" stroke-opacity="{stroke_op}"'
+        f'{dash_attr} stroke-linejoin="round"/></svg>'
+    )
+    return folium.DivIcon(
+        html=svg,
+        icon_size=(d, d),
+        icon_anchor=(d / 2, d / 2),
+        class_name="gem-shape-marker",
+    )
+
+
+# Non-coal mine helpers — color by primary commodity, pointy-top hexagon
+# marker, fixed radius (Tailings is enlarged because it's the most
+# health-critical site type in the curated list).
+NONCOAL_COLORS = {
+    "Rare Earth": "#6a1b9a",
+    "Gold": "#ffc107",
+    "Silver": "#9e9e9e",
+    "Copper": "#689f38",
+    "Iron": "#424242",
+    "Lead": "#c62828",
+    "Zinc": "#c62828",
+    "Tungsten": "#006064",
+    "Tin": "#ad1457",
+    "Lithium": "#ce93d8",
+    "Uranium": "#cddc39",
+    "Fluorite": "#66bb6a",
+    "Tailings": "#b71c1c",
+}
+NONCOAL_DEFAULT_COLOR = "#b39ddb"
+NONCOAL_R = 8.0
+NONCOAL_TAILINGS_R = 14.0
+
+
+def noncoal_color(commodity):
+    return NONCOAL_COLORS.get(commodity, NONCOAL_DEFAULT_COLOR)
+
+
+def noncoal_radius(commodity):
+    return NONCOAL_TAILINGS_R if commodity == "Tailings" else NONCOAL_R
+
+
+def noncoal_hex_icon(r, color, unknown=False):
+    import math
+    pad = 1.5
+    d = 2 * r + 2 * pad
+    cx = cy = d / 2
+    pts_xy = [
+        (cx, cy - r),
+        (cx + r * math.cos(math.radians(30)),
+         cy - r * math.sin(math.radians(30))),
+        (cx + r * math.cos(math.radians(30)),
+         cy + r * math.sin(math.radians(30))),
+        (cx, cy + r),
+        (cx - r * math.cos(math.radians(30)),
+         cy + r * math.sin(math.radians(30))),
+        (cx - r * math.cos(math.radians(30)),
+         cy - r * math.sin(math.radians(30))),
+    ]
+    pts = " ".join(f"{x:.2f},{y:.2f}" for x, y in pts_xy)
+    fill_op = 0.4 if unknown else 0.78
+    stroke_op = 0.55 if unknown else 0.9
+    dash_attr = ' stroke-dasharray="3,2"' if unknown else ''
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{d:.2f}" '
+        f'height="{d:.2f}" viewBox="0 0 {d:.2f} {d:.2f}" '
+        f'style="display:block;overflow:visible;">'
+        f'<polygon points="{pts}" fill="{color}" fill-opacity="{fill_op}" '
+        f'stroke="{color}" stroke-width="1.2" stroke-opacity="{stroke_op}"'
+        f'{dash_attr} stroke-linejoin="round"/></svg>'
+    )
+    return folium.DivIcon(
+        html=svg,
+        icon_size=(d, d),
+        icon_anchor=(d / 2, d / 2),
+        class_name="noncoal-marker",
+    )
+
+
 # Tang centroid radius scaling (linear, capped at 95th percentile)
 tang_areas = np.array([float(f["properties"]["area_km2"])
                        for f in tang_centroids])
@@ -94,6 +223,21 @@ TANG_AREA_CAP = float(np.percentile(tang_areas, TANG_AREA_CAP_PCT))
 m = folium.Map(location=INITIAL_CENTER, zoom_start=INITIAL_ZOOM,
                tiles="OpenStreetMap", control_scale=True)
 map_var = m.get_name()
+
+# CSS that the slider toggles via a body class. When the timeline is
+# active (slider < SLIDER_MAX), Tang centroid markers + cluster icons
+# are visually hidden — Tang is 2019 imagery with no temporal axis, so
+# showing it on a "mines opened by year" timeline is a category error.
+# This is a pure CSS override; the underlying Leaflet layer state stays
+# intact, which means the user's LayerControl checkbox preference is
+# preserved across slider toggles.
+m.get_root().header.add_child(folium.Element(
+    "<style>"
+    "body.sm-timeline-active .tang-marker, "
+    "body.sm-timeline-active .tang-cluster "
+    "{ display: none !important; }"
+    "</style>"
+))
 
 # Custom Leaflet panes for explicit z-order:
 #   tilePane(200) < tangPolyPane(380) < overlayPane(400) < markerPane(600)
@@ -206,10 +350,29 @@ tang_cluster.add_to(m)
 gem_group = folium.FeatureGroup(
     name=f"GEM coal mines ({summary['gem_count']} named)", show=True
 )
+# {marker_var_name: opening_year_or_None} — consumed by the timeline slider
+# JS to toggle marker visibility. Unknown-year mines (None) are kept on the
+# map at all slider positions.
+gem_year_map = {}
+gem_year_min = None
+gem_year_max = None
+gem_dated_count = 0
+gem_undated_count = 0
+
 for feat in gem_features:
     p = feat["properties"]
     cap = float(p["capacity_mtpa"])
     coords = feat["geometry"]["coordinates"]  # [lon, lat]
+    year = p.get("opening_year")
+    is_future = year is not None and year > SLIDER_MAX
+    # `unknown_year` drives both the visual treatment (dashed translucent
+    # style) and the slider visibility logic. Future-year mines look and
+    # behave like undated mines.
+    unknown_year = (year is None) or is_future
+    # `slider_year` is what the slider compares against — None for both
+    # undated and future mines so they fall into the always-shown-only-
+    # at-max group.
+    slider_year = None if unknown_year else year
 
     parts = [f"<b>{p['mine_name']}</b>"]
     if p.get("mine_name_zh"):
@@ -222,23 +385,119 @@ for feat in gem_features:
     if p.get("mine_type"):
         parts.append(f"<b>Mine type:</b> {p['mine_type']}")
     parts.append(f"<b>Prefecture:</b> {p['prefecture']}")
+    if year is None:
+        parts.append("<b>Opening year:</b> <i>unknown</i>")
+    elif is_future:
+        parts.append(f"<b>Opening year:</b> {year} (planned)")
+    else:
+        parts.append(f"<b>Opening year:</b> {year}")
     if p["merged_count"] > 1:
         parts.append(
             f"<i>Multi-phase project: details merged from "
             f"{p['merged_count']} GEM records</i>"
         )
+    grade = p.get("coal_grade")
+    if grade in ("Thermal", "Met", "Thermal & Met"):
+        parts.append(f"<b>Coal grade:</b> {grade}")
     popup = folium.Popup("<br>".join(parts), max_width=360)
     color = gem_color(p["status"])
+    r = gem_radius(cap)
+    shape = gem_shape(grade)
 
-    folium.CircleMarker(
+    if shape == "circle":
+        marker = folium.CircleMarker(
+            location=[coords[1], coords[0]],
+            radius=r,
+            color=color, weight=1.0, fill=True, fill_color=color,
+            fill_opacity=0.35 if unknown_year else 0.7,
+            opacity=0.55 if unknown_year else 0.7,
+            dash_array="3,2" if unknown_year else None,
+            popup=popup,
+            pane="gemPane",
+        )
+    else:
+        marker = folium.Marker(
+            location=[coords[1], coords[0]],
+            icon=gem_svg_icon(shape, r, color, unknown=unknown_year),
+            popup=popup,
+            pane="gemPane",
+        )
+    marker.add_to(gem_group)
+    gem_year_map[marker.get_name()] = slider_year
+    if slider_year is None:
+        gem_undated_count += 1
+    else:
+        gem_dated_count += 1
+        gem_year_min = slider_year if gem_year_min is None else min(
+            gem_year_min, slider_year)
+        gem_year_max = slider_year if gem_year_max is None else max(
+            gem_year_max, slider_year)
+
+gem_group.add_to(m)
+gem_group_var = gem_group.get_name()
+
+# ---------------------------------------------------------------------------
+# Layer 4: curated non-coal mines (hexagon markers, color by commodity)
+# ---------------------------------------------------------------------------
+noncoal_group = folium.FeatureGroup(
+    name=f"Named non-coal mines ({len(noncoal_features)} curated)",
+    show=True,
+)
+noncoal_year_map = {}
+
+def fmt_secondary(s):
+    if not s:
+        return None
+    return s.replace(";", ", ")
+
+
+for feat in noncoal_features:
+    p = feat["properties"]
+    coords = feat["geometry"]["coordinates"]
+    commodity = p.get("commodity_primary")
+    color = noncoal_color(commodity)
+    r = noncoal_radius(commodity)
+    year = p.get("opened_year")
+    is_future = year is not None and year > SLIDER_MAX
+    unknown_year = (year is None) or is_future
+    slider_year = None if unknown_year else year
+
+    # Build popup; skip lines whose value is None / empty so unknown
+    # fields just disappear.
+    parts = [f"<b>{p['name_en']}</b>"]
+    if p.get("name_zh"):
+        parts.append(f"<i>{p['name_zh']}</i>")
+    if commodity:
+        parts.append(f"<b>Primary commodity:</b> {commodity}")
+    sec = fmt_secondary(p.get("commodity_secondary"))
+    if sec:
+        parts.append(f"<b>Secondary:</b> {sec}")
+    where = ", ".join(x for x in [p.get("banner"), p.get("prefecture")] if x)
+    if where:
+        parts.append(f"<b>Banner / Prefecture:</b> {where}")
+    if p.get("operator"):
+        parts.append(f"<b>Operator:</b> {p['operator']}")
+    if p.get("opened_display"):
+        parts.append(f"<b>Opened:</b> {p['opened_display']}")
+    elif unknown_year:
+        parts.append("<b>Opened:</b> <i>unknown</i>")
+    if p.get("notes"):
+        parts.append(p["notes"])
+    if p.get("source"):
+        parts.append(f"<small>Source: {p['source']}</small>")
+    popup = folium.Popup("<br>".join(parts), max_width=360)
+
+    marker = folium.Marker(
         location=[coords[1], coords[0]],
-        radius=gem_radius(cap),
-        color=color, weight=1.0, fill=True, fill_color=color,
-        fill_opacity=0.7, opacity=0.7,
+        icon=noncoal_hex_icon(r, color, unknown=unknown_year),
         popup=popup,
         pane="gemPane",
-    ).add_to(gem_group)
-gem_group.add_to(m)
+    )
+    marker.add_to(noncoal_group)
+    noncoal_year_map[marker.get_name()] = slider_year
+
+noncoal_group.add_to(m)
+noncoal_group_var = noncoal_group.get_name()
 
 # ---------------------------------------------------------------------------
 # Mergen marker — never toggleable, always on top
@@ -286,12 +545,14 @@ title_html = f"""
     text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,.15);
     max-width: 78vw;">
   <div style="font-size: 18px; font-weight: 600;">
-    Mining Across Southern Mongolia / 南蒙古矿业图谱
+    Mining Across Southern Mongolia
   </div>
   <div style="font-size: 12px; color: #444; margin-top: 5px;
        line-height: 1.45;">
     {summary['gem_count']} named coal mines (Global Energy Monitor,
     May 2025)<br>
+    {summary['noncoal_count']} named non-coal mines (curated from
+    mindat.org and academic sources)<br>
     {summary['tang_polygon_count']:,} mining areas identified by satellite
     (Tang &amp; Werner 2023, all mineral types)<br>
     Total disturbed area: ~{summary['tang_total_area_km2']:,.0f} km²
@@ -316,11 +577,31 @@ info_html = f"""
   </div>
   <div style="margin-top: 7px; padding-top: 5px; border-top: 1px solid #ddd;
        font-size: 10.5px; line-height: 1.4;">
-    <b>GEM</b>
+    <b>GEM status</b>
     <span style="color:#d62728;">●</span> Operating
     <span style="color:#ff8c00;">●</span> Proposed
     <span style="color:#f1c40f;">●</span> Construction
     <span style="color:#7f7f7f;">●</span> Other<br>
+    <b>Coal grade</b><br>
+    <span style="color:#555;">●</span> Thermal (steam coal, power generation)<br>
+    <span style="color:#555;">▲</span> Metallurgical (coking coal, steel)<br>
+    <span style="color:#555;">◆</span> Thermal &amp; Metallurgical<br>
+    <b>Non-coal mines (curated)</b>
+    <div style="display: grid; grid-template-columns: 1fr 1fr;
+         column-gap: 6px; row-gap: 1px; margin: 2px 0 1px 0;">
+      <span><span style="color:#6a1b9a;">⬢</span> Rare Earth</span>
+      <span><span style="color:#ffc107;">⬢</span> Gold</span>
+      <span><span style="color:#9e9e9e;">⬢</span> Silver</span>
+      <span><span style="color:#689f38;">⬢</span> Copper</span>
+      <span><span style="color:#424242;">⬢</span> Iron</span>
+      <span><span style="color:#c62828;">⬢</span> Lead / Zinc</span>
+      <span><span style="color:#006064;">⬢</span> Tungsten</span>
+      <span><span style="color:#ce93d8;">⬢</span> Lithium</span>
+      <span><span style="color:#cddc39;">⬢</span> Uranium</span>
+      <span><span style="color:#66bb6a;">⬢</span> Fluorite</span>
+      <span><span style="color:#b71c1c;">⬢</span> Tailings</span>
+    </div>
+    Dashed outline = opening year unknown.<br>
     <b>Tang</b>
     <span style="color:{TANG_COLOR};">●</span> satellite-identified
     surface mining footprint<br>
@@ -330,24 +611,24 @@ info_html = f"""
 """
 
 pref_panel_html = f"""
-<div id="sm-pref-panel" style="position: fixed; top: 240px; right: 12px;
+<div id="sm-pref-panel" style="position: fixed; top: 380px; right: 12px;
     z-index: 1000; background: rgba(255,255,255,0.94);
     padding: 10px 12px; border: 1px solid #aaa; border-radius: 4px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 12px; width: 220px;
     box-shadow: 0 2px 6px rgba(0,0,0,.15);">
   <div style="font-weight: 600; margin-bottom: 6px;">
-    Jump to prefecture / 跳转盟市
+    Jump to prefecture
   </div>
   <select id="sm-pref-select" style="width: 100%; padding: 5px;
       font-size: 12px; box-sizing: border-box;">
-    <option value="">— select / 选择 —</option>
+    <option value="">— Select —</option>
     {options_html}
   </select>
   <button id="sm-pref-reset" style="margin-top: 6px; width: 100%;
       padding: 5px; font-size: 12px; cursor: pointer;
       background: #f0f0f0; border: 1px solid #aaa; border-radius: 3px;">
-    Reset view / 重置
+    Reset view
   </button>
   <div style="font-size: 10px; color: #777; margin-top: 6px;">
     {len(prefectures)} prefectures · sorted by mine count
@@ -364,16 +645,83 @@ footer_html = """
     box-shadow: 0 -1px 4px rgba(0,0,0,.08);">
   Tang &amp; Werner 2023 includes coal, metal, rare earth, and other
   surface mining. GEM May 2025 V2 covers coal mines only with 1 Mtpa+
-  capacity. The two datasets together span Southern Mongolia's named
-  mining industry and its full satellite-visible footprint.
+  capacity. Non-coal mines manually curated from mindat.org locality
+  data and peer-reviewed mining geology literature; coordinates
+  accurate to ~1 km.
+</div>
+"""
+
+noncoal_dated_count = sum(
+    1 for f in noncoal_features
+    if f["properties"].get("opened_year") is not None
+)
+noncoal_undated_count = len(noncoal_features) - noncoal_dated_count
+total_dated = gem_dated_count + noncoal_dated_count
+total_undated = gem_undated_count + noncoal_undated_count
+
+slider_html = f"""
+<div id="sm-time-slider" style="position: fixed; bottom: 50px; left: 50%;
+    transform: translateX(-50%); z-index: 1000;
+    background: rgba(255,255,255,0.94); padding: 8px 16px;
+    border: 1px solid #aaa; border-radius: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px; color: #333; width: min(680px, 88vw);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);">
+  <div style="display: flex; justify-content: space-between;
+      align-items: baseline; gap: 12px; margin-bottom: 4px;
+      flex-wrap: wrap;">
+    <span><b>Year:</b>
+      <span id="sm-year-label" style="font-weight: 600;">{SLIDER_INIT}</span>
+    </span>
+    <span style="color: #777; font-size: 10.5px;">
+      <span id="sm-year-shown">{total_dated}</span>/<span
+          id="sm-year-total">{total_dated}</span> dated mines visible
+    </span>
+  </div>
+  <input id="sm-year-slider" type="range" min="{SLIDER_MIN}"
+      max="{SLIDER_MAX}" value="{SLIDER_INIT}" step="1"
+      style="width: 100%;">
+  <div style="display: flex; justify-content: space-between;
+      font-size: 10px; color: #999; margin-top: 1px;">
+    <span>{SLIDER_MIN}</span><span>{SLIDER_MAX}</span>
+  </div>
+  <div style="font-size: 10px; color: #888; line-height: 1.45;
+      margin-top: 6px; padding-top: 5px; border-top: 1px solid #eee;">
+    Timeline shows mines by recorded opening year (Global Energy
+    Monitor data).<br>
+    <span id="sm-undated-count">{total_undated}</span> mines without
+    recorded opening year are visible only when timeline is at
+    {SLIDER_MAX}.<br>
+    Tang &amp; Werner satellite layer (2019 imagery) is hidden when
+    timeline is active, since it has no temporal resolution.
+  </div>
 </div>
 """
 
 m.get_root().html.add_child(folium.Element(
-    title_html + info_html + pref_panel_html + footer_html
+    title_html + info_html + pref_panel_html + slider_html + footer_html
 ))
 
-# Zoom toggle for polygon layer + dropdown handlers
+# Combined slider registry: {marker_var: {group, year}}. GEM markers map
+# to the GEM FeatureGroup; non-coal markers to the non-coal FeatureGroup.
+# Both share the slider; non-coal mines without a sortable opened year
+# behave identically to GEM mines without an opening year.
+combined_year_registry = {}
+for varname, year in gem_year_map.items():
+    combined_year_registry[varname] = {"group": gem_group_var, "year": year}
+for varname, year in noncoal_year_map.items():
+    combined_year_registry[varname] = {
+        "group": noncoal_group_var, "year": year
+    }
+
+# Zoom toggle for polygon layer + dropdown handlers + year slider.
+# Year slider semantics:
+#   slider == SLIDER_MAX  → undated mines visible (dashed style).
+#   slider <  SLIDER_MAX  → undated mines hidden, hint banner visible.
+#   prefecture Reset also snaps the slider back to SLIDER_MAX.
+# `markerYearMap` is one combined registry — the GEM loop populates it
+# now, the non-coal loop (Task B) extends it via the same JSON. Each
+# entry is `{{group: <featuregroup-var-name>, year: <int-or-null>}}`.
 panel_js = f"""
 <script>
 (function() {{
@@ -381,25 +729,63 @@ panel_js = f"""
     var initialCenter = {json.dumps(INITIAL_CENTER)};
     var initialZoom = {INITIAL_ZOOM};
     var POLY_MIN_ZOOM = {TANG_POLY_MIN_ZOOM};
+    var SLIDER_MAX = {SLIDER_MAX};
+    var markerYearRegistry = {json.dumps(combined_year_registry)};
+    var GEM_GROUP_NAME = "{gem_group_var}";
 
     function ready() {{
         var sel = document.getElementById('sm-pref-select');
         var reset = document.getElementById('sm-pref-reset');
-        if (!sel || !reset || typeof {map_var} === 'undefined') {{
+        var slider = document.getElementById('sm-year-slider');
+        var yearLabel = document.getElementById('sm-year-label');
+        var yearShown = document.getElementById('sm-year-shown');
+        var yearTotal = document.getElementById('sm-year-total');
+        var undatedCount = document.getElementById('sm-undated-count');
+        var gemGroup = (typeof {gem_group_var} !== 'undefined')
+            ? {gem_group_var} : null;
+        if (!sel || !reset || !slider || !gemGroup ||
+            typeof {map_var} === 'undefined') {{
             setTimeout(ready, 60);
             return;
+        }}
+
+        // Resolve registry entries: each value is either a year (legacy
+        // GEM-only format) or {{group, year}}. Coerce to the latter.
+        var registry = {{}};
+        Object.keys(markerYearRegistry).forEach(function(name) {{
+            var v = markerYearRegistry[name];
+            if (v === null || typeof v === 'number') {{
+                registry[name] = {{ group: GEM_GROUP_NAME, year: v }};
+            }} else {{
+                registry[name] = v;
+            }}
+        }});
+
+        var totalDated = 0, totalUndated = 0;
+        Object.keys(registry).forEach(function(name) {{
+            if (registry[name].year === null) totalUndated += 1;
+            else totalDated += 1;
+        }});
+        yearTotal.textContent = totalDated;
+        undatedCount.textContent = totalUndated;
+
+        function timelineActive() {{
+            return parseInt(slider.value, 10) < SLIDER_MAX;
         }}
 
         function updatePolyVisibility() {{
             var z = {map_var}.getZoom();
             var pane = {map_var}.getPane('tangPolyPane');
             if (!pane) return;
-            var visible = z >= POLY_MIN_ZOOM;
+            // Polygon pane hides if zoom is too low OR the timeline is
+            // active — Tang polygons are 2019 imagery with no temporal
+            // axis, same reasoning as for centroid markers (handled by
+            // the body.sm-timeline-active CSS rule).
+            var visible = z >= POLY_MIN_ZOOM && !timelineActive();
             pane.style.opacity = visible ? 1 : 0;
             pane.style.pointerEvents = visible ? 'auto' : 'none';
         }}
         {map_var}.on('zoomend', updatePolyVisibility);
-        updatePolyVisibility();
 
         sel.addEventListener('change', function(e) {{
             var v = e.target.value;
@@ -418,11 +804,66 @@ panel_js = f"""
                 }});
             }}
         }});
+
+        function setMarkerVisibility(name, entry, visible) {{
+            var marker = window[name];
+            var grp = window[entry.group];
+            if (!marker || !grp) return;
+            if (visible) {{
+                if (!grp.hasLayer(marker)) grp.addLayer(marker);
+                // Belt-and-suspenders: clear any leftover display:none
+                // on the rendered DOM element from a previous hide.
+                var elS = marker.getElement && marker.getElement();
+                if (elS) elS.style.display = '';
+            }} else {{
+                if (grp.hasLayer(marker)) grp.removeLayer(marker);
+                // Belt-and-suspenders: if removeLayer left any orphan
+                // DOM (shouldn't, but seen in some Leaflet edge cases
+                // with DivIcon markers), force-hide it.
+                var elH = marker.getElement && marker.getElement();
+                if (elH) elH.style.display = 'none';
+            }}
+        }}
+
+        function applyYear(y) {{
+            yearLabel.textContent = y;
+            var active = (y < SLIDER_MAX);
+            // Toggle body class so the CSS rule hides Tang centroids
+            // and cluster icons. LayerControl state is preserved — when
+            // the slider returns to max, Tang's natural state (per the
+            // user's checkbox) shines back through.
+            document.body.classList.toggle('sm-timeline-active', active);
+            // Re-evaluate the polygon pane (zoom × timeline gate).
+            updatePolyVisibility();
+            var visibleDated = 0;
+            Object.keys(registry).forEach(function(name) {{
+                var entry = registry[name];
+                var yr = entry.year;
+                if (yr === null) {{
+                    setMarkerVisibility(name, entry, !active);
+                }} else if (yr <= y) {{
+                    setMarkerVisibility(name, entry, true);
+                    visibleDated += 1;
+                }} else {{
+                    setMarkerVisibility(name, entry, false);
+                }}
+            }});
+            yearShown.textContent = visibleDated;
+        }}
+
+        slider.addEventListener('input', function() {{
+            applyYear(parseInt(slider.value, 10));
+        }});
+
         reset.addEventListener('click', function() {{
             sel.value = '';
+            slider.value = SLIDER_MAX;
+            applyYear(SLIDER_MAX);
             {map_var}.flyTo(initialCenter, initialZoom,
                 {{duration: 1.0}});
         }});
+
+        applyYear(parseInt(slider.value, 10));
     }}
     ready();
 }})();

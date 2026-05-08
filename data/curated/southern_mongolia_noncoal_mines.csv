@@ -1,0 +1,35 @@
+name_en,name_zh,name_local,prefecture,banner,commodity_primary,commodity_secondary,latitude,longitude,operator,opened,notes,source
+Bayan Obo Main Mine,白云鄂博主矿,Bayan Obo,Baotou,Bayan Obo Mining District,Rare Earth,Iron;Niobium;Fluorite,41.7958,109.9694,Baogang Group / China Northern Rare Earth,1957,World's largest REE deposit; ~40% of global REE reserves,mindat:720
+Bayan Obo East Mine,白云鄂博东矿,Bayan Obo East,Baotou,Bayan Obo Mining District,Rare Earth,Iron;Niobium,41.8011,109.9817,Baogang Group,1957,Eastern open pit,mindat:134499
+Bayan Obo West Mine,白云鄂博西矿,Bayan Obo West,Baotou,Bayan Obo Mining District,Rare Earth,Iron,41.7900,109.8800,Baogang Group,2013,Newer pit opened post-2013,mindat
+Huogeqi Copper Mine,霍各乞铜矿,Huogeqi,Bayannur,Urad Rear Banner,Copper,Lead;Zinc;Iron,41.0700,107.6500,Inner Mongolia Huogeqi Mining,1980s,Largest Cu-Pb-Zn in Langshan belt,academic
+Dongshengmiao Mine,东升庙矿,Dongshengmiao,Bayannur,Urad Rear Banner,Zinc,Lead;Copper,41.1000,106.8500,Inner Mongolia Dongshengmiao Mining,1980s,SEDEX-type giant Pb-Zn,academic
+Tanyaokou Mine,炭窑口矿,Tanyaokou,Bayannur,Urad Rear Banner,Lead,Zinc;Copper,41.1000,106.5500,Inner Mongolia Nonferrous,1980s,Langshan SEDEX belt,academic
+Jiashengpan Mine,甲生盘矿,Jiashengpan,Bayannur,Urad Middle Banner,Zinc,Lead,41.5000,108.9500,Inner Mongolia Xitietashan,2000s,Zhaertai segment of Langshan belt,academic
+Miaogou Sanguikou,庙沟与三贵口,Miaogou Sanguikou,Bayannur,Urad Front Banner,Zinc,Lead;Copper;Silver,41.1300,107.1000,unknown,unknown,Polymetallic deposit; in Jasansky 2023,jasansky
+Hua'aobaote Ag-Pb-Zn,花敖包特银铅锌矿,Hua'aobaote,Xilingol,West Ujimqin Banner,Silver,Lead;Zinc,44.7000,118.2000,Yulong Mining (Silvercorp),2002,"Acquired by Canadian Silvercorp Metals 2012; in Bayanhua Town, in Mergen incident area",company report
+Baiyinchagan Mine,白音查干银矿,Baiyinchagan,Xilingol,West Ujimqin Banner,Silver,Tin;Lead;Zinc,44.6500,117.9000,unknown,unknown,Sn-Ag-Pb-Zn polymetallic; large reserves,mindat:225464
+Daolundaba Cu-W,道伦达坝铜钨矿,Daolundaba,Xilingol,West Ujimqin Banner,Copper,Tungsten,45.0000,117.5000,unknown,2000s,Cu-W polymetallic,mindat
+Maodeng Cu-Sn,毛登铜锡矿,Maodeng,Xilingol,West Ujimqin Banner,Copper,Tin,45.1000,118.0000,unknown,2010s,Cu-Sn deposit,mindat
+Shihuiyao Li-Ta-Nb,石灰窑稀有金属矿,Shihuiyao,Xilingol,West Ujimqin Banner,Lithium,Niobium;Tantalum;Beryllium;Rubidium,44.8000,117.7000,unknown,exploration,Strategic critical minerals deposit,mindat
+Chaobuleng Fe-Zn-Pb,朝不楞铁锌铅矿,Chaobuleng,Xilingol,East Ujimqin Banner,Iron,Zinc;Lead;Silver;Copper;Tungsten,45.7000,118.0000,unknown,1977,Skarn-type Fe-Zn-Pb mine since 1977,mindat:722
+Rongguan Mine,容冠矿,Rongguan,Xilingol,East Ujimqin Banner,Iron,Zinc,45.5000,118.4000,unknown,2006,Polymetallic skarn,mindat:233880
+Shamai W Mine,沙麦钨矿,Shamai,Xilingol,East Ujimqin Banner,Tungsten,Molybdenum,46.5000,118.5000,unknown,unknown,Quartz vein W deposit; 550 W-bearing veins,mindat:225450
+Highland 1017 Ag-Pb-Zn,1017高地银铅锌矿,Highland 1017,Xilingol,East Ujimqin Banner,Silver,Lead;Zinc,45.8000,117.3000,unknown,unknown,Ag-Pb-Zn deposit,mindat
+Huanaote Pb-Zn-Ag,花脑特铅锌银矿,Huanaote,Xilingol,East Ujimqin Banner,Lead,Zinc;Silver,46.0000,118.2000,unknown,unknown,Epithermal Pb-Zn,mindat
+Huanggang Fe-Sn,黄岗梁铁锡矿,Huanggang,Chifeng,Hexigten Banner,Iron,Tin,43.5500,117.5000,unknown,1990s,Major Fe-Sn deposit,academic
+Dajing Ag-Pb-Zn,大井银铅锌矿,Dajing,Chifeng,Linxi County,Silver,Lead;Zinc;Copper,43.6500,118.2000,unknown,1990s,Large Ag-Pb-Zn,academic
+Baiyinnuoer Pb-Zn,白音诺尔铅锌矿,Baiyinnuoer,Chifeng,Bairin Right Banner,Lead,Zinc,43.7800,119.3000,unknown,1980s,Skarn-type Pb-Zn,academic
+Erdaohezi Pb-Zn,二道河子铅锌矿,Erdaohezi,Chifeng,Aohan Banner,Lead,Zinc,42.2900,120.0500,unknown,1960s,Older Pb-Zn,academic
+Haobugao Pb-Zn,浩布高铅锌矿,Haobugao,Chifeng,Bairin Left Banner,Lead,Zinc;Tin,43.7000,119.0000,unknown,2000s,Pb-Zn-Sn,academic
+Anle Pb-Zn,安乐铅锌矿,Anle,Chifeng,Bairin Left Banner,Lead,Zinc,43.8000,119.2000,unknown,unknown,Pb-Zn,academic
+Wunugetushan Cu-Mo,乌奴格吐山铜钼矿,Wunugetushan,Hulun Buir,New Barag Right Banner,Copper,Molybdenum,49.4500,117.7000,Zijin Mining,2009,Major porphyry Cu-Mo,company report
+Bayan Obo Iron Tailings,白云鄂博尾矿坝,Baotou Tailings,Baotou,Donghe District,Tailings,Rare Earth waste;Radioactive,40.6500,109.9000,Baogang Group,1965,10 km² toxic tailings pond; severe health crisis in Dalahai village,environmental reporting
+Wulashan Gold Mine,乌拉山金矿,Wulashan,Bayannur,Wuyuan County,Gold,Silver,40.9500,108.8500,Inner Mongolia Wulashan Gold,1990s,Gold deposit south of Yellow River,academic
+Jinchanggouliang Gold,金厂沟梁金矿,Jinchanggouliang,Chifeng,Aohan Banner,Gold,Silver,41.7500,120.4000,Aohan Banner Gold,1980s,Major gold mine in eastern Inner Mongolia,academic
+Erdaogou Au-Ag,二道沟金银矿,Erdaogou,Chifeng,Hexigten Banner,Gold,Silver,43.4000,117.8000,unknown,unknown,Gold-silver deposit,academic
+Hadamengou Gold,哈达门沟金矿,Hadamengou,Baotou,Guyang County,Gold,unknown,41.0500,110.4000,Inner Mongolia Pacific Mining,1990s,Major gold deposit north of Baotou,academic
+Aohan Cu,敖汉铜矿,Aohan Cu,Chifeng,Aohan Banner,Copper,unknown,42.4500,119.9500,unknown,unknown,Multiple Cu deposits in Aohan area,academic
+Erlian Uranium,二连铀矿,Erlian,Xilingol,Sonid Right Banner,Uranium,unknown,43.8000,111.9000,CNNC,2000s,In-situ leach uranium; Sonid Basin,company
+Baiyinwula Fluorite,白音乌拉萤石矿,Baiyinwula,Hulun Buir,New Barag Left Banner,Fluorite,unknown,48.5000,117.5000,unknown,unknown,Major fluorite deposit,academic
+Subei Fluorite,苏北萤石矿,Subei,Xilingol,Sonid Left Banner,Fluorite,unknown,44.3000,113.8000,unknown,unknown,Fluorite,academic
