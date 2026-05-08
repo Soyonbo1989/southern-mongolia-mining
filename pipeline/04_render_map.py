@@ -248,6 +248,12 @@ m.get_root().header.add_child(folium.Element(
     "</style>"
 ))
 
+# Chart.js for the Data Story tab. Loaded synchronously in <head> so it's
+# guaranteed available by the time the user clicks Story.
+m.get_root().header.add_child(folium.Element(
+    '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'
+))
+
 # Custom Leaflet panes for explicit z-order:
 #   tilePane(200) < tangPolyPane(380) < overlayPane(400) < markerPane(600)
 #   < gemPane(650) < mergenPane(700)
@@ -546,7 +552,7 @@ pref_bounds_js = json.dumps({
 })
 
 title_html = f"""
-<div id="sm-title" style="position: fixed; top: 12px; left: 50%;
+<div id="sm-title" style="position: fixed; top: 56px; left: 50%;
     transform: translateX(-50%); z-index: 1000;
     background: rgba(255,255,255,0.94); padding: 10px 18px;
     border: 1px solid #aaa; border-radius: 4px;
@@ -709,6 +715,472 @@ slider_html = f"""
 
 m.get_root().html.add_child(folium.Element(
     title_html + info_html + pref_panel_html + slider_html + footer_html
+))
+
+# ---------------------------------------------------------------------------
+# Tab switcher: Map / Data Story
+# ---------------------------------------------------------------------------
+tab_styles = f"""
+<style>
+/* Tab bar — fixed top, always visible across both views */
+#sm-tab-bar {{
+  position: fixed; top: 0; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  background: rgba(255,255,255,0.97);
+  border: 1px solid #aaa; border-top: none;
+  border-radius: 0 0 6px 6px;
+  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+}}
+.sm-tab {{
+  padding: 8px 22px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #555;
+  transition: color 120ms, border-color 120ms;
+}}
+.sm-tab:hover {{ color: #222; }}
+.sm-tab.sm-tab-active {{
+  color: #c62828;
+  border-bottom-color: #c62828;
+  font-weight: 600;
+}}
+
+/* Story-mode body scroll: folium's defaults lock body height to
+   100vh so the map fills the viewport. Override that when the story
+   is active so the page can scroll naturally. */
+body.sm-story-active,
+html.sm-story-active-html {{
+  height: auto !important;
+  overflow: auto !important;
+}}
+
+/* Hide map + all map UI panels when story is active */
+body.sm-story-active #{map_var},
+body.sm-story-active #sm-title,
+body.sm-story-active #sm-info,
+body.sm-story-active #sm-pref-panel,
+body.sm-story-active #sm-time-slider,
+body.sm-story-active #sm-footer {{
+  display: none !important;
+}}
+
+/* Data Story container */
+#sm-data-story {{
+  display: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 80px 24px 120px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #222;
+  font-size: 19px;
+  line-height: 1.6;
+  background: #fff;
+}}
+body.sm-story-active #sm-data-story {{ display: block; }}
+
+.sm-section {{ margin: 80px 0; }}
+.sm-section:first-child {{ margin-top: 56px; }}
+.sm-eyebrow {{
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: #c62828; margin-bottom: 14px;
+}}
+.sm-headline {{
+  font-size: 38px; font-weight: 700;
+  color: #222; margin-bottom: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}}
+.sm-giant {{
+  font-size: 96px; font-weight: 800;
+  color: #c62828; line-height: 1.0;
+  margin: 28px 0 18px;
+  letter-spacing: -3px;
+}}
+.sm-subtitle {{
+  font-size: 17px; color: #555;
+  line-height: 1.5; margin-bottom: 32px;
+}}
+.sm-lede {{ font-size: 21px; line-height: 1.55; color: #333; }}
+.sm-keyline {{
+  font-size: 21px; font-weight: 500;
+  margin: 28px 0; color: #222;
+  line-height: 1.5;
+}}
+.sm-cite {{
+  font-size: 13px; color: #888;
+  margin-top: 16px; font-style: italic;
+}}
+.sm-note {{
+  font-size: 13.5px; color: #777;
+  line-height: 1.55; margin-top: 32px;
+  padding: 14px 18px;
+  background: #f7f7f7;
+  border-left: 3px solid #c0c0c0;
+}}
+.sm-quote {{
+  font-size: 30px; font-weight: 500;
+  line-height: 1.4; color: #222;
+  text-align: center;
+  margin: 40px 0 14px;
+  font-style: italic;
+}}
+.sm-quote-cite {{
+  text-align: center;
+  font-size: 13px; color: #888;
+  margin-top: 4px; font-style: italic;
+}}
+.sm-list {{
+  font-size: 19px; line-height: 1.6;
+  padding-left: 22px; margin: 20px 0;
+}}
+.sm-list li {{ margin: 14px 0; }}
+.sm-chart-wrap {{
+  position: relative;
+  height: 340px;
+  margin: 28px 0 12px;
+}}
+.sm-source-block {{
+  font-size: 14px; color: #555;
+  line-height: 1.65;
+  border-top: 1px solid #ddd;
+  padding-top: 24px;
+}}
+.sm-source-block a {{ color: #c62828; }}
+.sm-divider {{
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 60px 0 0;
+}}
+
+@media (max-width: 600px) {{
+  .sm-giant {{ font-size: 48px; letter-spacing: -1.5px; }}
+  .sm-headline {{ font-size: 28px; }}
+  .sm-quote {{ font-size: 22px; }}
+  .sm-lede {{ font-size: 18px; }}
+  .sm-keyline {{ font-size: 18px; }}
+  #sm-data-story {{ padding: 80px 16px 80px; font-size: 17px; }}
+  .sm-list {{ font-size: 17px; }}
+  .sm-chart-wrap {{ height: 280px; }}
+}}
+</style>
+"""
+
+tab_bar_html = """
+<div id="sm-tab-bar" role="tablist" aria-label="View switcher">
+  <button id="sm-tab-map" class="sm-tab sm-tab-active" type="button"
+          role="tab" aria-selected="true">Map</button>
+  <button id="sm-tab-story" class="sm-tab" type="button"
+          role="tab" aria-selected="false">Data Story</button>
+</div>
+"""
+
+# Data Story content. Numbers ≥ 1,000 use thousand separators; "Southern
+# Mongolia" used throughout (never "Inner Mongolia"). The Section 3 note
+# explains the ~9,000 km² (Ma) vs 2,565 km² (Tang) divergence so a reader
+# tabbing back and forth doesn't conclude one of the figures is wrong.
+data_story_html = """
+<div id="sm-data-story">
+
+  <section class="sm-section">
+    <div class="sm-eyebrow">A data story</div>
+    <h1 class="sm-headline">Forty years. Twenty-one times more mines.</h1>
+    <div class="sm-subtitle">What four decades of satellite data reveal
+      about Southern Mongolia.</div>
+    <p class="sm-lede">Between 1975 and 2015, the Mongolian Plateau became
+      the largest surface coal mining region on Earth. The data tell a
+      story Mergen tried to tell.</p>
+  </section>
+
+  <hr class="sm-divider">
+
+  <section class="sm-section">
+    <h2 class="sm-headline">The acceleration</h2>
+    <div class="sm-giant">516 → 10,834</div>
+    <div class="sm-subtitle">Surface coal mines on the Mongolian Plateau,
+      1975–2015.</div>
+    <div class="sm-chart-wrap"><canvas id="sm-chart-mines"></canvas></div>
+    <p class="sm-keyline">Ninety percent of these mines are in Southern
+      Mongolia.</p>
+    <p class="sm-keyline">The steepest period was 2000–2010: more than
+      6,000 new mines opened in a single decade. Mergen was killed in
+      2011.</p>
+    <div class="sm-cite">Source: Ma et al. (2021), Landsat satellite
+      imagery, 1975–2015.</div>
+  </section>
+
+  <hr class="sm-divider">
+
+  <section class="sm-section">
+    <h2 class="sm-headline">The land</h2>
+    <div class="sm-giant">~9,000 km²</div>
+    <div class="sm-subtitle">Of grassland, cropland, and desert in
+      Southern Mongolia destroyed (~459 km²) or disturbed (~8,686 km²)
+      by surface coal mining, 2000–2015.</div>
+    <div class="sm-chart-wrap"><canvas id="sm-chart-land"></canvas></div>
+    <div class="sm-note">
+      <b>Note:</b> This figure (~9,000 km²) includes both directly
+      excavated mining surfaces and the surrounding ecosystems whose
+      vegetation has been measurably degraded by mining within a 1–5 km
+      buffer. It differs from the 2,565 km² figure on the Map tab,
+      which measures only the visible bare-earth pit surface from 2019
+      satellite imagery (Tang &amp; Werner 2023). The two are
+      complementary measures of the same phenomenon at different
+      spatial scopes.
+    </div>
+    <div class="sm-cite">Source: Ma et al. (2021).</div>
+  </section>
+
+  <hr class="sm-divider">
+
+  <section class="sm-section">
+    <h2 class="sm-headline">The water</h2>
+    <div class="sm-giant">17×</div>
+    <div class="sm-subtitle" style="margin-bottom: 6px;">Increase in water
+      consumed by coal mining on the Mongolian Plateau, 1990–2015.</div>
+    <div style="font-size: 13.5px; color: #888; font-style: italic;
+                margin-bottom: 32px;">
+      Southern Mongolia accounts for ~90% of this total.
+    </div>
+    <div class="sm-chart-wrap"><canvas id="sm-chart-water"></canvas></div>
+    <ul class="sm-list">
+      <li>2.32 billion cubic meters of water consumed by coal mining on
+        the Mongolian Plateau in 2015 alone, more than 90 percent of
+        which in Southern Mongolia.</li>
+      <li>54% of mining-disturbed land on the Mongolian Plateau lies in
+        regions classified as <i>high</i> or <i>extremely high</i>
+        water-stressed.</li>
+      <li>30% of lakes larger than 10 km² on the Mongolian Plateau have
+        disappeared.</li>
+    </ul>
+    <div class="sm-cite">Source: Ma et al. (2021).</div>
+  </section>
+
+  <hr class="sm-divider">
+
+  <section class="sm-section">
+    <h2 class="sm-headline">Where the money went</h2>
+    <blockquote class="sm-quote">"The huge economic profits generated by
+      coal mining benefited primarily the private and governmental
+      investors and mine operators, not the local herders."</blockquote>
+    <div class="sm-quote-cite">— Ma et al. (2021), citing Dai et al.
+      (2014) and Liu et al. (2014)</div>
+    <p class="sm-keyline" style="margin-top: 48px;">In Southern Mongolia,
+      the urban–rural income ratio rose in lockstep with the mining
+      curve. The grass was sold. The herders did not see the money.</p>
+  </section>
+
+  <hr class="sm-divider">
+
+  <section class="sm-section sm-source-block">
+    <h2 class="sm-headline" style="font-size: 22px;">Source</h2>
+    <p>Ma, Q., Wu, J., He, C., Fang, X. (2021). &ldquo;The speed, scale,
+      and environmental and economic impacts of surface coal mining in
+      the Mongolian Plateau.&rdquo; <i>Resources, Conservation and
+      Recycling</i> 173, 105730. DOI:
+      <a href="https://doi.org/10.1016/j.resconrec.2021.105730"
+         target="_blank" rel="noopener">10.1016/j.resconrec.2021.105730</a>.
+    </p>
+    <p>Findings drawn from Landsat satellite imagery (1975–2015),
+      peer-reviewed and published in <i>Resources, Conservation and
+      Recycling</i>.</p>
+  </section>
+
+</div>
+"""
+
+tab_js = """
+<script>
+(function() {
+  var chartsBuilt = false;
+
+  function buildCharts() {
+    if (chartsBuilt) return;
+    if (typeof Chart === 'undefined') return;
+    chartsBuilt = true;
+    Chart.defaults.font.family =
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    Chart.defaults.color = '#444';
+
+    // Section 2 — mine-count line, plateau-wide, 1975–2015
+    new Chart(document.getElementById('sm-chart-mines'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Surface coal mines',
+          data: [
+            {x:1975, y:516},
+            {x:1990, y:1558},
+            {x:2000, y:2777},
+            {x:2010, y:8847},
+            {x:2015, y:10834}
+          ],
+          borderColor: '#c62828',
+          backgroundColor: 'rgba(198,40,40,0.20)',
+          fill: true,
+          tension: 0.25,
+          pointRadius: 5,
+          pointBackgroundColor: '#c62828',
+          borderWidth: 2.5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: function(items) { return 'Year ' + items[0].parsed.x; },
+              label: function(c) {
+                return c.parsed.y.toLocaleString() + ' mines';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear', min: 1975, max: 2015,
+            title: { display: true, text: 'Year' },
+            ticks: { stepSize: 5,
+                     callback: function(v) { return Math.round(v); } }
+          },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Number of surface coal mines' },
+            ticks: { callback: function(v) { return v.toLocaleString(); } }
+          }
+        }
+      }
+    });
+
+    // Section 3 — stacked land-disturbance bar
+    new Chart(document.getElementById('sm-chart-land'), {
+      type: 'bar',
+      data: {
+        labels: ['Directly destroyed', 'Indirectly disturbed'],
+        datasets: [
+          { label: 'Grassland', data: [308.62, 5697],
+            backgroundColor: '#7cb342' },
+          { label: 'Cropland',  data: [102.75, 1871],
+            backgroundColor: '#fbc02d' },
+          { label: 'Desert',    data: [47.62,  1118],
+            backgroundColor: '#bcaaa4' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                return c.dataset.label + ': ' +
+                       c.raw.toLocaleString() + ' km²';
+              }
+            }
+          }
+        },
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true, beginAtZero: true,
+            title: { display: true, text: 'Area (km²)' },
+            ticks: { callback: function(v) { return v.toLocaleString(); } }
+          }
+        }
+      }
+    });
+
+    // Section 4 — water-consumption line, 1990–2015
+    new Chart(document.getElementById('sm-chart-water'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Water consumed',
+          data: [
+            {x:1990, y:135.85},
+            {x:2015, y:2315}
+          ],
+          borderColor: '#1565c0',
+          backgroundColor: 'rgba(21,101,192,0.18)',
+          fill: true,
+          tension: 0,
+          pointRadius: 7,
+          pointBackgroundColor: '#1565c0',
+          borderWidth: 2.5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: function(items) { return 'Year ' + items[0].parsed.x; },
+              label: function(c) {
+                return c.parsed.y.toLocaleString() + ' million m³';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear', min: 1990, max: 2015,
+            title: { display: true, text: 'Year' },
+            ticks: { stepSize: 5,
+                     callback: function(v) { return Math.round(v); } }
+          },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Water consumed (million m³)' },
+            ticks: { callback: function(v) { return v.toLocaleString(); } }
+          }
+        }
+      }
+    });
+  }
+
+  function ready() {
+    var mapTab = document.getElementById('sm-tab-map');
+    var storyTab = document.getElementById('sm-tab-story');
+    if (!mapTab || !storyTab) { setTimeout(ready, 60); return; }
+
+    function showMap() {
+      document.body.classList.remove('sm-story-active');
+      document.documentElement.classList.remove('sm-story-active-html');
+      mapTab.classList.add('sm-tab-active');
+      mapTab.setAttribute('aria-selected', 'true');
+      storyTab.classList.remove('sm-tab-active');
+      storyTab.setAttribute('aria-selected', 'false');
+    }
+    function showStory() {
+      document.body.classList.add('sm-story-active');
+      document.documentElement.classList.add('sm-story-active-html');
+      storyTab.classList.add('sm-tab-active');
+      storyTab.setAttribute('aria-selected', 'true');
+      mapTab.classList.remove('sm-tab-active');
+      mapTab.setAttribute('aria-selected', 'false');
+      window.scrollTo(0, 0);
+      buildCharts();
+    }
+    mapTab.addEventListener('click', showMap);
+    storyTab.addEventListener('click', showStory);
+  }
+  ready();
+})();
+</script>
+"""
+
+m.get_root().html.add_child(folium.Element(
+    tab_styles + tab_bar_html + data_story_html + tab_js
 ))
 
 # Combined slider registry: {marker_var: {group, year}}. GEM markers map
